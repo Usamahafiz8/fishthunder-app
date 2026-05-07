@@ -8,6 +8,9 @@ import { TransactionEntity } from './entities/transaction.entity';
 import { UserActivityEntity } from './entities/user-activity.entity';
 import { ShopEntity } from './entities/shop.entity';
 import { PasswordResetEntity } from './entities/password-reset.entity';
+import { GameEntity } from './entities/game.entity';
+import { GameSessionEntity } from './entities/game-session.entity';
+import { SpinEntity } from './entities/spin.entity';
 
 @Module({
   imports: [
@@ -32,6 +35,9 @@ import { PasswordResetEntity } from './entities/password-reset.entity';
           UserActivityEntity,
           ShopEntity,
           PasswordResetEntity,
+          GameEntity,
+          GameSessionEntity,
+          SpinEntity,
         ],
         migrations: ['dist/database/migrations/*.js'],
       }),

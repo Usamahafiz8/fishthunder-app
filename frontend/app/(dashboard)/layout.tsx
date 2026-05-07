@@ -3,13 +3,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { LayoutDashboard, Users, Wallet, ArrowRightLeft, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Users, Wallet, ArrowRightLeft, LogOut, Menu, X, Gamepad2, Tv2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 
 const NAV = [
   { href: '/dashboard',    label: 'Dashboard',    icon: LayoutDashboard, roles: null },
   { href: '/users',        label: 'Users',        icon: Users,           roles: ['admin','agent','distributor','manager','cashier'] },
+  { href: '/games',        label: 'Games',        icon: Gamepad2,        roles: ['admin','agent'] },
+  { href: '/play',         label: 'Play',         icon: Tv2,             roles: null },
   { href: '/wallet',       label: 'My Wallet',    icon: Wallet,          roles: null },
   { href: '/transactions', label: 'Transactions', icon: ArrowRightLeft,  roles: null },
 ];

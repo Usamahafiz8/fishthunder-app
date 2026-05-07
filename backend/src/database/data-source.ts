@@ -8,6 +8,9 @@ import { TransactionEntity } from './entities/transaction.entity';
 import { UserActivityEntity } from './entities/user-activity.entity';
 import { ShopEntity } from './entities/shop.entity';
 import { PasswordResetEntity } from './entities/password-reset.entity';
+import { GameEntity } from './entities/game.entity';
+import { GameSessionEntity } from './entities/game-session.entity';
+import { SpinEntity } from './entities/spin.entity';
 
 dotenv.config();
 
@@ -29,6 +32,9 @@ export const AppDataSource = new DataSource({
     UserActivityEntity,
     ShopEntity,
     PasswordResetEntity,
+    GameEntity,
+    GameSessionEntity,
+    SpinEntity,
   ],
   migrations: ['src/database/migrations/*.ts'],
 });

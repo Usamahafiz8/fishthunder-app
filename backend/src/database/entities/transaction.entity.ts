@@ -14,10 +14,15 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserEntity } from './user.entity';
 
 export enum TransactionType {
-  CREDIT     = 'credit',
-  DEBIT      = 'debit',
-  ADJUSTMENT = 'adjustment',
-  SYSTEM     = 'system',
+  CREDIT      = 'credit',
+  DEBIT       = 'debit',
+  ADJUSTMENT  = 'adjustment',
+  SYSTEM      = 'system',
+  SESSION_IN  = 'session_in',
+  SESSION_OUT = 'session_out',
+  BET         = 'bet',
+  WIN         = 'win',
+  REFUND      = 'refund',
 }
 
 export enum TransactionStatus {
@@ -66,6 +71,16 @@ export class TransactionEntity {
 
   @Column({ type: 'varchar', name: 'ip_address', length: 45, nullable: true })
   ipAddress: string | null;
+
+  @Index({ unique: true, sparse: true })
+  @Column({ type: 'varchar', name: 'idempotency_key', length: 100, nullable: true })
+  idempotencyKey: string | null;
+
+  @Column({ type: 'uuid', name: 'session_id', nullable: true })
+  sessionId: string | null;
+
+  @Column({ type: 'int', name: 'game_id', nullable: true })
+  gameId: number | null;
 
   @Index()
   @CreateDateColumn({ name: 'created_at' })

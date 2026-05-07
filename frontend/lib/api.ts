@@ -88,3 +88,26 @@ export const adminApi = {
   stats:     () => api.get('/api/admin/stats'),
   chartData: () => api.get('/api/admin/stats/chart'),
 };
+
+// ── Games ─────────────────────────────────────────────────────────────────────
+
+export const gamesApi = {
+  list:    (params?: Record<string, any>) => api.get('/api/games', { params }),
+  get:     (id: number)                   => api.get(`/api/games/${id}`),
+  create:  (data: any)                    => api.post('/api/games', data),
+  update:  (id: number, data: any)        => api.patch(`/api/games/${id}`, data),
+  disable: (id: number)                   => api.patch(`/api/games/${id}/disable`),
+};
+
+// ── Sessions ──────────────────────────────────────────────────────────────────
+
+export const sessionsApi = {
+  start:          (data: { gameId: number; transferAmount: number })   => api.post('/api/sessions/start', data),
+  end:            (sessionId: string, reason?: string)                  => api.post(`/api/sessions/${sessionId}/end`, { reason }),
+  spin:           (sessionId: string, betAmount: number, idempotencyKey: string) =>
+    api.post(`/api/sessions/${sessionId}/spin`, { betAmount, idempotencyKey }),
+  get:            (sessionId: string)  => api.get(`/api/sessions/${sessionId}`),
+  spins:          (sessionId: string)  => api.get(`/api/sessions/${sessionId}/spins`),
+  active:         ()                   => api.get('/api/sessions'),
+  history:        ()                   => api.get('/api/sessions/history/all'),
+};
