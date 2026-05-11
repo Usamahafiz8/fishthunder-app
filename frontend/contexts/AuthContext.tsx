@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = useCallback(async (identifier: string, password: string) => {
     const res  = await authApi.login({ identifier, password });
     const data = res.data.data;
-    Cookies.set('auth_token', data.token, { expires: 1, secure: true, sameSite: 'strict' });
+    Cookies.set('auth_token', data.token, { expires: 1, sameSite: 'lax' });
     localStorage.setItem('auth_user', JSON.stringify(data.user));
     setToken(data.token);
     setUser(data.user);
@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = useCallback(async (data: { username: string; email: string; password: string; password_confirmation: string }) => {
     const res   = await authApi.register(data);
     const body  = res.data.data;
-    Cookies.set('auth_token', body.token, { expires: 1, secure: true, sameSite: 'strict' });
+    Cookies.set('auth_token', body.token, { expires: 1, sameSite: 'lax' });
     localStorage.setItem('auth_user', JSON.stringify(body.user));
     setToken(body.token);
     setUser(body.user);
