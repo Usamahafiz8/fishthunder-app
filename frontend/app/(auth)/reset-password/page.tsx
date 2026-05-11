@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -13,7 +13,7 @@ interface ResetForm {
   password_confirmation: string;
 }
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const router       = useRouter();
   const searchParams = useSearchParams();
   const token        = searchParams.get('token') ?? '';
@@ -38,6 +38,38 @@ export default function ResetPasswordPage() {
   };
 
   return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <div>
+        <label className="label">New Password</label>
+        <input
+          {...register('password', { required: 'Password is required', minLength: { value: 8, message: 'Min 8 characters' } })}
+          type="password"
+          className={`input ${errors.password ? 'input-error' : ''}`}
+          placeholder="••••••••"
+        />
+        {errors.password && <p className="mt-1 text-xs text-red-600">{errors.password.message}</p>}
+      </div>
+
+      <div>
+        <label className="label">Confirm New Password</label>
+        <input
+          {...register('password_confirmation', { required: 'Please confirm password', validate: (v) => v === password || 'Passwords do not match' })}
+          type="password"
+          className={`input ${errors.password_confirmation ? 'input-error' : ''}`}
+          placeholder="••••••••"
+        />
+        {errors.password_confirmation && <p className="mt-1 text-xs text-red-600">{errors.password_confirmation.message}</p>}
+      </div>
+
+      <button type="submit" disabled={loading} className="btn-primary w-full">
+        {loading ? 'Resetting…' : 'Reset Password'}
+      </button>
+    </form>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-900 to-primary-700 px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
@@ -46,33 +78,9 @@ export default function ResetPasswordPage() {
         </div>
 
         <div className="card p-8">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div>
-              <label className="label">New Password</label>
-              <input
-                {...register('password', { required: 'Password is required', minLength: { value: 8, message: 'Min 8 characters' } })}
-                type="password"
-                className={`input ${errors.password ? 'input-error' : ''}`}
-                placeholder="••••••••"
-              />
-              {errors.password && <p className="mt-1 text-xs text-red-600">{errors.password.message}</p>}
-            </div>
-
-            <div>
-              <label className="label">Confirm New Password</label>
-              <input
-                {...register('password_confirmation', { required: 'Please confirm password', validate: (v) => v === password || 'Passwords do not match' })}
-                type="password"
-                className={`input ${errors.password_confirmation ? 'input-error' : ''}`}
-                placeholder="••••••••"
-              />
-              {errors.password_confirmation && <p className="mt-1 text-xs text-red-600">{errors.password_confirmation.message}</p>}
-            </div>
-
-            <button type="submit" disabled={loading} className="btn-primary w-full">
-              {loading ? 'Resetting…' : 'Reset Password'}
-            </button>
-          </form>
+          <Suspense fallback={<p className="text-center text-gray-400">Loading…</p>}>
+            <ResetPasswordForm />
+          </Suspense>
 
           <p className="mt-6 text-center text-sm text-gray-500">
             <Link href="/login" className="text-primary-600 hover:underline">Back to Sign In</Link>
