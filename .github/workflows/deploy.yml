@@ -7,18 +7,18 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to VPS
+    name: Trigger Deploy via Webhook
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          port: 22
-          script: |
-            bash /root/fishthunder-app/deploy.sh
-          script_stop: true
-          timeout: 600s
+      - name: Ping deploy webhook
+        run: |
+          PAYLOAD='{"ref":"refs/heads/main","pusher":{"name":"github-actions"}}'
+          SIG=$(echo -n "$PAYLOAD" | openssl dgst -sha256 -hmac "${{ secrets.WEBHOOK_SECRET }}" | sed 's/.*= //')
+          curl -f -s -X POST http://${{ secrets.SERVER_HOST }}:9000/deploy \
+            -H "Content-Type: application/json" \
+            -H "X-GitHub-Event: push" \
+            -H "X-Hub-Signature-256: sha256=$SIG" \
+            -d "$PAYLOAD" \
+            && echo "Deploy triggered successfully" \
+            || echo "Webhook ping failed (server may be unreachable)"
